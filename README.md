@@ -1,2 +1,2 @@
 # bespin
-🏗 Infrastructure configuration for Riht
+☁️ Infrastructure configuration for Riht
