@@ -11,6 +11,7 @@
 an AWS EC2 key pair which you will need to be able to SSH into the EC2 instance(s).
 2. Create a file in the root of this repo called `terraform.tfvars` and fill it out like this:
 ```
+name = "WHATEVER_UNIQUE_NAME_YOU_WANT"
 access_key = "YOUR_AWS_ACCESS_KEY_ID"
 secret_key = "YOUR_AWS_SECRET_ACCESS_KEY"
 key_name   = "YOUR_AWS_EC2_KEY_PAIR_NAME"
