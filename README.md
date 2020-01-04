@@ -16,8 +16,9 @@ access_key = "YOUR_AWS_ACCESS_KEY_ID"
 secret_key = "YOUR_AWS_SECRET_ACCESS_KEY"
 key_name   = "YOUR_AWS_EC2_KEY_PAIR_NAME"
 ```
-3. Run `terraform plan` to see what resources will be created and then `terraform apply` to create the resources. Enter
+3. Run `terraform init` to initialize the Terraform working directory.
+4. Run `terraform plan` to see what resources will be created and then `terraform apply` to create the resources. Enter
 `yes` when prompted by Terraform.
-4. Once the previous command is done running, the AWS resources should now be visible in the AWS console (UI) and ready
+5. Once the previous command is done running, the AWS resources should now be visible in the AWS console (UI) and ready
 to be used for development/testing. Once you're done using the resources, run `terraform destroy`. Enter `yes` when
 prompted by Terraform.
