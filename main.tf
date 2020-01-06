@@ -56,7 +56,7 @@ module "vpc" {
   private_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
   public_subnets  = ["10.1.11.0/24", "10.1.12.0/24"]
 
-  enable_nat_gateway = true
+  enable_nat_gateway = false # Set to false for now to save on deploy time
 
   tags = {
     Name = var.name
@@ -96,7 +96,7 @@ module "autoscaling" {
 
   # Auto scaling group
   asg_name                  = "${var.name}_asg"
-  vpc_zone_identifier       = module.vpc.private_subnets
+  vpc_zone_identifier       = module.vpc.public_subnets
   health_check_type         = "EC2"
   min_size                  = 0
   max_size                  = 1
@@ -118,4 +118,9 @@ data "template_file" "user_data" {
   vars = {
     cluster_name = var.name
   }
+}
+
+module "example_service" {
+  source     = "./modules/example_service"
+  cluster_id = aws_ecs_cluster.riht.id
 }
