@@ -7,6 +7,7 @@ provider "aws" {
 module "ecs_base" {
   source = "./modules/ecs_base"
   name = var.name
+  enable_nat_gateway = false
 }
 
 module "ecs_cluster" {
