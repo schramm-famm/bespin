@@ -1,7 +1,10 @@
 variable "name" {
-  type = string
+  type        = string
+  description = "Name used to identify resources"
 }
 
 variable "enable_nat_gateway" {
-  type = bool
+  type        = bool
+  description = "Toggle the creation of a NAT gateway in the VPC"
+  default     = false
 }

@@ -29,8 +29,8 @@ module "autoscaling" {
 
   image_id             = data.aws_ami.amazon_linux_ecs.id
   instance_type        = "t2.micro"
-  security_groups      = [var.vpc_default_security_group_id]
-  iam_instance_profile = var.ecs_instance_profile_id
+  security_groups      = [var.security_group_id]
+  iam_instance_profile = var.ec2_instance_profile_id
   user_data            = data.template_file.user_data.rendered
 
   # Auto scaling group
