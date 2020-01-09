@@ -1,7 +1,3 @@
-resource "aws_ecs_cluster" "this" {
-  name = var.name
-}
-
 resource "aws_iam_role" "ecs_agent" {
   name = "${var.name}_ecs_instance_role"
   path = "/ecs/"
@@ -54,62 +50,5 @@ module "vpc" {
 
   tags = {
     Name = var.name
-  }
-}
-
-data "aws_ami" "amazon_linux_ecs" {
-  most_recent = true
-
-  owners = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn-ami-*-amazon-ecs-optimized"]
-  }
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-}
-
-module "autoscaling" {
-  source  = "terraform-aws-modules/autoscaling/aws" # 3rd party module
-  version = "~> 3.0"
-
-  name = var.name
-
-  # Launch configuration
-  lc_name = "${var.name}_launch_configuration"
-
-  image_id             = data.aws_ami.amazon_linux_ecs.id
-  instance_type        = "t2.micro"
-  security_groups      = [module.vpc.default_security_group_id]
-  iam_instance_profile = aws_iam_instance_profile.ecs_agent.id
-  user_data            = data.template_file.user_data.rendered
-
-  # Auto scaling group
-  asg_name                  = "${var.name}_asg"
-  vpc_zone_identifier       = module.vpc.private_subnets
-  health_check_type         = "EC2"
-  min_size                  = 0
-  max_size                  = 1
-  desired_capacity          = 1
-  wait_for_capacity_timeout = 0
-
-  tags = [
-    {
-      key                 = "Cluster"
-      value               = var.name
-      propagate_at_launch = true
-    },
-  ]
-}
-
-data "template_file" "user_data" {
-  template = file("${path.module}/user_data.sh")
-
-  vars = {
-    cluster_name = var.name
   }
 }
