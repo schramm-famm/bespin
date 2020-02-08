@@ -4,7 +4,7 @@ resource "aws_docdb_subnet_group" "docdb" {
 }
 
 resource "aws_docdb_cluster_instance" "docdb" {
-  count              = 2
+  count              = 1
   identifier         = "${aws_docdb_cluster.docdb.id}-${count.index}"
   cluster_identifier = aws_docdb_cluster.docdb.id
   instance_class     = "db.r5.large"
