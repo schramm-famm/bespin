@@ -19,7 +19,12 @@ variable "region" {
   default     = "us-east-2"
 }
 
-variable "key_name" {
+variable "docdb_username" {
   type        = string
-  description = "AWS key pair name for SSH access to EC2 instances"
+  description = "Username for the master DocumentDB user"
+}
+
+variable "docdb_password" {
+  type        = string
+  description = "Password for the master DocumentDB user"
 }

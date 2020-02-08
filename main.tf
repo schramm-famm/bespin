@@ -17,3 +17,12 @@ module "ecs_cluster" {
   subnets                 = module.ecs_base.vpc_private_subnets
   ec2_instance_profile_id = module.ecs_base.ecs_instance_profile_id
 }
+
+module "docdb_cluster" {
+  source             = "./modules/docdb_cluster"
+  name               = var.name
+  security_group_ids = [module.ecs_base.vpc_default_security_group_id]
+  subnets            = module.ecs_base.vpc_private_subnets
+  master_username    = var.docdb_username
+  master_password    = var.docdb_password
+}
