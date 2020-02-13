@@ -3,9 +3,9 @@ variable "name" {
   description = "Name used to identify resources"
 }
 
-variable "security_group_id" {
-  type        = string
-  description = "ID of the security group to attach to EC2 container instances in the cluster"
+variable "security_group_ids" {
+  type        = list(string)
+  description = "IDs of the security groups to attach to EC2 container instances in the cluster"
 }
 
 variable "ec2_instance_profile_id" {
