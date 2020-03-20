@@ -28,3 +28,13 @@ variable "docdb_password" {
   type        = string
   description = "Password for the master DocumentDB user"
 }
+
+variable "rds_username" {
+  type        = string
+  description = "Username for the master RDS user"
+}
+
+variable "rds_password" {
+  type        = string
+  description = "Password for the master RDS user"
+}

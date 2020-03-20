@@ -26,3 +26,15 @@ module "docdb_cluster" {
   master_username    = var.docdb_username
   master_password    = var.docdb_password
 }
+
+module "rds_instance" {
+  source          = "./modules/rds_instance"
+  name            = var.name
+  engine          = "mariadb"
+  engine_version  = "10.2.21"
+  port            = 3306
+  master_username = var.rds_username
+  master_password = var.rds_password
+  vpc_id          = module.ecs_base.vpc_id
+  subnet_ids      = module.ecs_base.vpc_private_subnets
+}
