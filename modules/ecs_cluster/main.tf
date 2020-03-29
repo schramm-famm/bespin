@@ -31,7 +31,14 @@ module "autoscaling" {
   instance_type        = "t2.micro"
   security_groups      = var.security_group_ids
   iam_instance_profile = var.ec2_instance_profile_id
-  user_data            = data.template_file.user_data.rendered
+
+  user_data = <<EOF
+${templatefile("${path.module}/user_data.sh", { cluster_name = var.name })}
+%{if var.enable_efs}
+${templatefile("${path.module}/efs_setup.sh", { efs_id = var.efs_id })}
+%{endif}
+echo "Done"
+EOF
 
   # Auto scaling group
   asg_name                  = "${var.name}_asg"

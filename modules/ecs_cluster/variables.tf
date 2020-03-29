@@ -17,3 +17,15 @@ variable "subnets" {
   type        = list
   description = "List of subnets where EC2 container instances in the cluster will be deployed"
 }
+
+variable "enable_efs" {
+  type        = bool
+  description = "Toggle the mounting of an EFS file system on the EC2 container instances"
+  default     = false
+}
+
+variable "efs_id" {
+  type        = string
+  description = "ID of the EFS file system to mount on the EC2 container instances"
+  default     = ""
+}
