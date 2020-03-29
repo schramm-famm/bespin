@@ -31,6 +31,7 @@ module "autoscaling" {
   instance_type        = "t2.micro"
   security_groups      = var.security_group_ids
   iam_instance_profile = var.ec2_instance_profile_id
+  key_name             = var.key_name
 
   user_data = <<EOF
 ${templatefile("${path.module}/user_data.sh", { cluster_name = var.name })}

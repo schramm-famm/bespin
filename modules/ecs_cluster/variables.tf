@@ -18,6 +18,12 @@ variable "subnets" {
   description = "List of subnets where EC2 container instances in the cluster will be deployed"
 }
 
+variable "key_name" {
+  type        = string
+  description = "Key pair name to use for SSH access"
+  default     = ""
+}
+
 variable "enable_efs" {
   type        = bool
   description = "Toggle the mounting of an EFS file system on the EC2 container instances"
