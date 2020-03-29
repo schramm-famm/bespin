@@ -39,14 +39,13 @@ module "vpc" {
 
   name = var.name
 
-  cidr = "10.1.0.0/16"
+  cidr            = var.cidr
+  azs             = var.azs
+  private_subnets = var.private_subnets
+  public_subnets  = var.public_subnets
 
-  # TODO: Don't hard code these three arguments
-  azs             = ["us-east-2a", "us-east-2b"]
-  private_subnets = ["10.1.1.0/24", "10.1.2.0/24"]
-  public_subnets  = ["10.1.11.0/24", "10.1.12.0/24"]
-
-  enable_nat_gateway = var.enable_nat_gateway
+  enable_nat_gateway   = var.enable_nat_gateway
+  enable_dns_hostnames = true
 
   tags = {
     Name = var.name
