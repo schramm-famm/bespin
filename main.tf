@@ -38,3 +38,13 @@ module "rds_instance" {
   vpc_id          = module.ecs_base.vpc_id
   subnet_ids      = module.ecs_base.vpc_private_subnets
 }
+
+module "timescaledb_instance" {
+  source                  = "./modules/timescaledb"
+  name                    = var.name
+  vpc_id                  = module.ecs_base.vpc_id
+  subnets                 = module.ecs_base.vpc_private_subnets
+  ecs_instance_profile_id = module.ecs_base.ecs_instance_profile_id
+  internal                = true
+  db_password             = var.timescaledb_password
+}

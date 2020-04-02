@@ -38,3 +38,8 @@ variable "rds_password" {
   type        = string
   description = "Password for the master RDS user"
 }
+
+variable "timescaledb_password" {
+  type        = string
+  description = "Password for the TimescaleDB user"
+}
