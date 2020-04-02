@@ -18,6 +18,12 @@ variable "subnets" {
   description = "List of subnets where EC2 container instances in the cluster will be deployed"
 }
 
+variable "instance_count" {
+  type        = number
+  description = "Number of EC2 container instances to register to the cluster"
+  default     = 1
+}
+
 variable "key_name" {
   type        = string
   description = "Key pair name to use for SSH access"

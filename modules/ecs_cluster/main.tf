@@ -46,8 +46,8 @@ EOF
   vpc_zone_identifier       = var.subnets
   health_check_type         = "EC2"
   min_size                  = 0
-  max_size                  = 1
-  desired_capacity          = 1
+  max_size                  = var.instance_count
+  desired_capacity          = var.instance_count
   wait_for_capacity_timeout = 0
 
   tags = [
