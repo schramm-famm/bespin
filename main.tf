@@ -248,7 +248,7 @@ module "ether" {
 }
 
 module "patches" {
-  source            = "github.com/schramm-famm/patches?ref=igor%2Fterraform//terraform/modules/patches"
+  source            = "github.com/schramm-famm/patches?ref=sprint05//terraform/modules/patches"
   name              = var.name
   container_tag     = var.patches_container_tag
   port              = 8083
