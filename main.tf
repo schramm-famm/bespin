@@ -11,7 +11,7 @@ locals {
   vpc_public_subnets  = ["10.1.11.0/24", "10.1.12.0/24"]
 }
 
-/* BASE RESOURCE CONFIG */
+/* BASE RESOURCES CONFIG */
 
 module "ecs_base" {
   source             = "./modules/ecs_base"
