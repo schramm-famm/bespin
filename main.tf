@@ -41,16 +41,44 @@ module "heimdall_ecs_cluster" {
   ec2_instance_profile_id = module.ecs_base.ecs_instance_profile_id
 }
 
+module "frontend_ecs_cluster" {
+  source                  = "github.com/schramm-famm/bespin//modules/ecs_cluster"
+  name                    = "${var.name}-frontend"
+  security_group_ids      = [aws_security_group.service_instances.id]
+  subnets                 = module.ecs_base.vpc_private_subnets
+  ec2_instance_profile_id = module.ecs_base.ecs_instance_profile_id
+}
+
 /* SECURITY GROUPS CONFIG */
 
-resource "aws_security_group" "load_balancer" {
-  name        = "${var.name}_load_balancer"
-  description = "Allow traffic into load balancer"
+resource "aws_security_group" "http_load_balancer" {
+  name        = "${var.name}_http_load_balancer"
+  description = "Allow HTTP traffic into load balancer"
   vpc_id      = module.ecs_base.vpc_id
 
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "https_load_balancer" {
+  name        = "${var.name}_https_load_balancer"
+  description = "Allow HTTPS traffic into load balancer"
+  vpc_id      = module.ecs_base.vpc_id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -196,7 +224,7 @@ resource "aws_efs_mount_target" "ether" {
   security_groups = [aws_security_group.efs.id]
 }
 
-/* SERVICES CONFIG */
+/* BACKEND SERVICES CONFIG */
 
 module "heimdall" {
   source              = "github.com/schramm-famm/heimdall//terraform/modules/heimdall"
@@ -221,7 +249,7 @@ module "karen" {
   container_tag   = var.karen_container_tag
   port            = 8081
   cluster_id      = module.backend_ecs_cluster.cluster_id
-  security_groups = [aws_security_group.load_balancer.id]
+  security_groups = [aws_security_group.http_load_balancer.id]
   subnets         = module.ecs_base.vpc_private_subnets
   internal        = true
   db_location     = module.rds_instance.db_endpoint
@@ -235,7 +263,7 @@ module "ether" {
   container_tag   = var.ether_container_tag
   port            = 8082
   cluster_id      = module.backend_ecs_cluster.cluster_id
-  security_groups = [aws_security_group.load_balancer.id]
+  security_groups = [aws_security_group.http_load_balancer.id]
   subnets         = module.ecs_base.vpc_private_subnets
   internal        = true
   db_location     = module.rds_instance.db_endpoint
@@ -253,7 +281,7 @@ module "patches" {
   container_tag     = var.patches_container_tag
   port              = 8083
   cluster_id        = module.backend_ecs_cluster.cluster_id
-  security_groups   = [aws_security_group.load_balancer.id]
+  security_groups   = [aws_security_group.http_load_balancer.id]
   subnets           = module.ecs_base.vpc_private_subnets
   internal          = true
   db_host           = module.timescaledb_instance.db_host
@@ -264,4 +292,18 @@ module "patches" {
   kafka_topic       = "updates"
   heimdall_endpoint = module.heimdall.internal_lb_dns_name
   ether_endpoint    = module.ether.elb_dns_name
+}
+
+/* FRONTEND SERVICE CONFIG */
+
+module "me_you" {
+  source          = "github.com/schramm-famm/me-you?ref=sprint05//terraform"
+  name            = var.name
+  container_tag   = var.me_you_container_tag
+  cluster_id      = module.frontend_ecs_cluster.cluster_id
+  security_groups = [aws_security_group.https_load_balancer.id]
+  subnets         = module.ecs_base.vpc_public_subnets
+  backend         = module.heimdall.external_lb_dns_name
+  cert            = var.cert
+  cert_key        = var.private_key_cert
 }

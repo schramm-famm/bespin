@@ -62,6 +62,12 @@ variable "patches_container_tag" {
   default     = "latest"
 }
 
+variable "me_you_container_tag" {
+  type        = string
+  description = "Tag of the Docker container to be used in the me-you task definition"
+  default     = "latest"
+}
+
 /* TLS VARIABLES */
 
 variable "private_key_cert" {
