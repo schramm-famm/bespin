@@ -19,15 +19,7 @@ variable "region" {
   default     = "us-east-2"
 }
 
-variable "docdb_username" {
-  type        = string
-  description = "Username for the master DocumentDB user"
-}
-
-variable "docdb_password" {
-  type        = string
-  description = "Password for the master DocumentDB user"
-}
+/* DATABASE VARIABLES */
 
 variable "rds_username" {
   type        = string
@@ -42,4 +34,48 @@ variable "rds_password" {
 variable "timescaledb_password" {
   type        = string
   description = "Password for the TimescaleDB user"
+}
+
+/* SERVICE CONTAINER TAG VARIABLES */
+
+variable "heimdall_container_tag" {
+  type        = string
+  description = "Tag of the Docker container to be used in the heimdall task definition"
+  default     = "latest"
+}
+
+variable "karen_container_tag" {
+  type        = string
+  description = "Tag of the Docker container to be used in the karen task definition"
+  default     = "latest"
+}
+
+variable "ether_container_tag" {
+  type        = string
+  description = "Tag of the Docker container to be used in the ether task definition"
+  default     = "latest"
+}
+
+variable "patches_container_tag" {
+  type        = string
+  description = "Tag of the Docker container to be used in the patches task definition"
+  default     = "latest"
+}
+
+variable "me_you_container_tag" {
+  type        = string
+  description = "Tag of the Docker container to be used in the me-you task definition"
+  default     = "latest"
+}
+
+/* TLS VARIABLES */
+
+variable "private_key_cert" {
+  type        = string
+  description = "Local path to the private RSA key for the TLS certificate for heimdall"
+}
+
+variable "cert" {
+  type        = string
+  description = "Local path to the TLS certificate for heimdall"
 }
