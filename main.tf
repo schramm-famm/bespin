@@ -282,7 +282,7 @@ module "ether" {
 }
 
 module "patches" {
-  source            = "github.com/schramm-famm/patches?ref=sprint05//terraform/modules/patches"
+  source            = "github.com/schramm-famm/patches//terraform/modules/patches"
   name              = var.name
   container_tag     = var.patches_container_tag
   port              = 8083
@@ -304,7 +304,7 @@ module "patches" {
 /* FRONTEND SERVICE CONFIG */
 
 module "me_you" {
-  source          = "github.com/schramm-famm/me-you?ref=sprint05//terraform"
+  source          = "github.com/schramm-famm/me-you//terraform"
   name            = var.name
   container_tag   = var.me_you_container_tag
   container_count = 1
