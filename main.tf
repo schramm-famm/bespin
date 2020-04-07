@@ -192,7 +192,7 @@ data "aws_msk_configuration" "main" {
 }
 
 resource "aws_msk_cluster" "main" {
-  cluster_name           = "main"
+  cluster_name           = var.name
   kafka_version          = "2.3.1"
   number_of_broker_nodes = 2
 
