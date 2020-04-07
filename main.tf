@@ -31,6 +31,7 @@ module "backend_ecs_cluster" {
   ec2_instance_profile_id = module.ecs_base.ecs_instance_profile_id
   enable_efs              = true
   efs_id                  = aws_efs_file_system.ether.id
+  instance_count          = 1
 }
 
 module "heimdall_ecs_cluster" {
@@ -39,6 +40,7 @@ module "heimdall_ecs_cluster" {
   security_group_ids      = [aws_security_group.service_instances.id]
   subnets                 = module.ecs_base.vpc_private_subnets
   ec2_instance_profile_id = module.ecs_base.ecs_instance_profile_id
+  instance_count          = 1
 }
 
 module "frontend_ecs_cluster" {
@@ -47,6 +49,7 @@ module "frontend_ecs_cluster" {
   security_group_ids      = [aws_security_group.service_instances.id]
   subnets                 = module.ecs_base.vpc_private_subnets
   ec2_instance_profile_id = module.ecs_base.ecs_instance_profile_id
+  instance_count          = 1
 }
 
 /* SECURITY GROUPS CONFIG */
@@ -230,6 +233,7 @@ module "heimdall" {
   source              = "github.com/schramm-famm/heimdall//terraform/modules/heimdall"
   name                = var.name
   container_tag       = var.heimdall_container_tag
+  container_count     = 1
   cluster_id          = module.heimdall_ecs_cluster.cluster_id
   vpc_id              = module.ecs_base.vpc_id
   external_lb_subnets = module.ecs_base.vpc_public_subnets
@@ -248,6 +252,7 @@ module "karen" {
   name            = var.name
   container_tag   = var.karen_container_tag
   port            = 8081
+  container_count = 1
   cluster_id      = module.backend_ecs_cluster.cluster_id
   security_groups = [aws_security_group.http_load_balancer.id]
   subnets         = module.ecs_base.vpc_private_subnets
@@ -262,6 +267,7 @@ module "ether" {
   name            = var.name
   container_tag   = var.ether_container_tag
   port            = 8082
+  container_count = 1
   cluster_id      = module.backend_ecs_cluster.cluster_id
   security_groups = [aws_security_group.http_load_balancer.id]
   subnets         = module.ecs_base.vpc_private_subnets
@@ -280,6 +286,7 @@ module "patches" {
   name              = var.name
   container_tag     = var.patches_container_tag
   port              = 8083
+  container_count   = 1
   cluster_id        = module.backend_ecs_cluster.cluster_id
   security_groups   = [aws_security_group.http_load_balancer.id]
   subnets           = module.ecs_base.vpc_private_subnets
@@ -300,6 +307,7 @@ module "me_you" {
   source          = "github.com/schramm-famm/me-you?ref=sprint05//terraform"
   name            = var.name
   container_tag   = var.me_you_container_tag
+  container_count = 1
   cluster_id      = module.frontend_ecs_cluster.cluster_id
   security_groups = [aws_security_group.https_load_balancer.id]
   subnets         = module.ecs_base.vpc_public_subnets
